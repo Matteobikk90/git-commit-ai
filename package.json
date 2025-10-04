@@ -1,11 +1,26 @@
 {
   "name": "git-commit-ai",
   "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "type": "module",
   "bin": {
     "git-c": "src/commit-agent.ts"
   },
   "scripts": {
     "dev": "ts-node src/commit-agent.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.17.1",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "openai": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

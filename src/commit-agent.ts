@@ -1,16 +1,24 @@
 #!/usr/bin/env ts-node
 
 import { execSync } from "child_process";
+import "dotenv/config";
 import OpenAI from "openai";
 
 async function main() {
+  const apiKey = process.env.OPENAI_API_KEY;
   const diff = execSync("git diff --staged").toString();
+
   if (!diff.trim()) {
     console.log("No staged changes");
     process.exit(0);
   }
 
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  if (!apiKey) {
+    console.error("Missing OPENAI_API_KEY. Add it in .env or export it.");
+    process.exit(1);
+  }
+
+  const client = new OpenAI({ apiKey });
 
   const completion = await client.chat.completions.create({
     model: "gpt-4.1-mini",
