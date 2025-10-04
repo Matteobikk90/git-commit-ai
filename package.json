@@ -8,7 +8,8 @@
     "git-c": "src/commit-agent.ts"
   },
   "scripts": {
-    "dev": "ts-node src/commit-agent.ts"
+    "dev": "ts-node src/commit-agent.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

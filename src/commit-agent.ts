@@ -3,19 +3,33 @@
 import { execSync } from "child_process";
 import "dotenv/config";
 import OpenAI from "openai";
+import readline from "readline";
+
+async function ask(question: string): Promise<string> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  return new Promise((resolve) =>
+    rl.question(question, (ans) => {
+      rl.close();
+      resolve(ans);
+    })
+  );
+}
 
 async function main() {
   const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    console.error("Missing OPENAI_API_KEY. Add it in .env or export it.");
+    process.exit(1);
+  }
+
   const diff = execSync("git diff --staged").toString();
 
   if (!diff.trim()) {
     console.log("No staged changes");
     process.exit(0);
-  }
-
-  if (!apiKey) {
-    console.error("Missing OPENAI_API_KEY. Add it in .env or export it.");
-    process.exit(1);
   }
 
   const client = new OpenAI({ apiKey });
@@ -38,7 +52,13 @@ async function main() {
     process.exit(1);
   }
 
-  console.log("Commit:", message);
+  console.log(`\nProposed commit: "${message}"`);
+  const answer = (await ask("Accept? (y/n): ")).toLowerCase();
+  if (answer !== "y") {
+    console.log("Aborted.");
+    process.exit(0);
+  }
+
   execSync(`git commit -m "${message.replace(/"/g, '\\"')}"`, {
     stdio: "inherit",
   });
