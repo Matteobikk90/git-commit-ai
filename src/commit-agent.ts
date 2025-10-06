@@ -25,7 +25,9 @@ async function main() {
     process.exit(1);
   }
 
-  const diff = execSync("git diff --staged").toString();
+  const diff = execSync("git diff --staged", {
+    maxBuffer: Infinity,
+  }).toString();
 
   if (!diff.trim()) {
     console.log("No staged changes");
