@@ -26,7 +26,7 @@ async function main() {
   }
 
   const diff = execSync(
-    "git diff --staged -- . ':(exclude)*.png' ':(exclude)*.jpg' ':(exclude)*.jpeg' ':(exclude)*.svg' ':(exclude)*.gif' ':(exclude)*.webp'",
+    "git diff --staged -- . ':(exclude)*.png' ':(exclude)*.jpg' ':(exclude)*.jpeg' ':(exclude)*.svg' ':(exclude)*.gif' ':(exclude)*.webp' ':(exclude)*.json' ':(exclude)*.lock' ':(exclude)*.md' ':(exclude)*.env'",
     { maxBuffer: 1024 * 1024 * 10 }
   ).toString();
 
@@ -38,12 +38,12 @@ async function main() {
   const client = new OpenAI({ apiKey });
 
   const completion = await client.chat.completions.create({
-    model: "gpt-4.1-mini",
+    model: "gpt-5-nano",
     messages: [
       {
         role: "system",
         content:
-          "You are a commit message assistant. Always output one single-line Conventional Commit message.",
+          "You are a commit message assistant. Output one single-line Conventional Commit message under 70 characters. Be concise and ignore non-functional changes.",
       },
       { role: "user", content: `Generate a commit message for:\n\n${diff}` },
     ],
