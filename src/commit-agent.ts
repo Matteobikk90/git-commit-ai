@@ -62,8 +62,9 @@ async function main() {
     process.exit(0);
   }
 
-  execSync(`git commit -m "${message.replace(/"/g, '\\"')}"`, {
+  execSync("git commit -m " + JSON.stringify(message), {
     stdio: "inherit",
+    env: process.env,
   });
 }
 
